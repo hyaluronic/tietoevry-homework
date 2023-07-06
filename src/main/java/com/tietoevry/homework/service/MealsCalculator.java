@@ -1,30 +1,34 @@
 package com.tietoevry.homework.service;
 
-import com.tietoevry.homework.model.Season;
+import com.tietoevry.homework.model.Food;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.Month;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class MealsCalculator {
 
-    private static final Long MEALS_PER_DAY = 5L;
+    private final FoodService foodService;
 
-    public Integer calculate(LocalDate startDate, LocalDate endDate) {
-        double mealsNeeded = 0;
-        LocalDate currentDate = startDate;
-        Month currentMonth = startDate.getMonth();
-        Season currentSeason = Season.getCurrentSeason(currentMonth);
-        while (!currentDate.isAfter(endDate))  {
-            Month newMonth = currentDate.getMonth();
-            if (!currentMonth.equals(newMonth)) {
-                currentSeason = Season.getCurrentSeason(newMonth);
-                currentMonth = newMonth;
-            }
-            mealsNeeded += currentSeason.getMealsMultiplier() * MEALS_PER_DAY;
-            currentDate = currentDate.plusDays(1);
+    public Map<Food, Integer> calculateMeals(int targetCalories) {
+        List<Food> items = foodService.findAll();
+
+        Map<Food, Integer> selectedItems = new HashMap<>();
+
+        int accumulatedCalories = 0;
+
+        while (accumulatedCalories < targetCalories) {
+            Collections.shuffle(items);
+            Food food = items.get(0);
+            accumulatedCalories += food.getCalories();
+            selectedItems.merge(food, 1, Integer::sum);
         }
-        return (int) Math.ceil(mealsNeeded);
+
+        return selectedItems;
     }
 }

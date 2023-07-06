@@ -1,32 +1,62 @@
 package com.tietoevry.homework.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.Hibernate;
 
 import java.time.Month;
-import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
-public enum Season {
-    WINTER(Set.of(Month.DECEMBER, Month.JANUARY, Month.FEBRUARY), 0.7, 1.2),
-    SPRING(Set.of(Month.MARCH, Month.APRIL, Month.MAY), 0.9, 1),
-    SUMMER(Set.of(Month.JUNE, Month.JULY, Month.AUGUST), 1, 1.2),
-    AUTUMN(Set.of(Month.SEPTEMBER, Month.OCTOBER, Month.NOVEMBER), 0.9, 1);
+@Setter
+@Entity
+@Table(name = "season")
+public class Season {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+    private String name;
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private Set<Month> months;
+    private double speedMultiplier;
+    private double caloriesMultiplier;
 
-    private final Set<Month> months;
-    private final double speedMultiplier;
-    private final double mealsMultiplier;
+    @ManyToMany(mappedBy = "seasons")
+    private Set<Misc> miscs;
 
-    Season(Set<Month> months, double speedMultiplier, double mealsMultiplier) {
-        this.months = months;
-        this.speedMultiplier = speedMultiplier;
-        this.mealsMultiplier = mealsMultiplier;
+    public Season() {
     }
 
-    public static Season getCurrentSeason(Month month) {
-        return Arrays.stream(Season.values())
-                .filter(season -> season.months.contains(month))
-                .findAny()
-                .orElseThrow(IllegalArgumentException::new);
+    public Season(String name, Set<Month> months, double speedMultiplier, double caloriesMultiplier) {
+        this.name = name;
+        this.months = months;
+        this.speedMultiplier = speedMultiplier;
+        this.caloriesMultiplier = caloriesMultiplier;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Season season = (Season) o;
+        return id != null && Objects.equals(id, season.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

@@ -1,38 +1,40 @@
 package com.tietoevry.homework.model;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 
-import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "item")
 @Getter
 @Setter
-@AllArgsConstructor // Add the all-argument constructor
-@Builder
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "item_type")
+@Table(name = "item")
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
     private String name;
-    @ElementCollection
-    private List<Season> seasons;
+
+    //TODO: add item expiration time?
 
     public Item() {
+    }
 
+    public Item(String name) {
+        this.name = name;
     }
 
     @Override
