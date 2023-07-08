@@ -15,18 +15,19 @@ public class MealsCalculator {
 
     private final FoodService foodService;
 
-    public Map<Food, Integer> calculateMeals(int targetCalories) {
+    public Map<Food, Integer> calculateMeals(long targetCalories) {
         List<Food> items = foodService.findAll();
 
         Map<Food, Integer> selectedItems = new HashMap<>();
 
-        int accumulatedCalories = 0;
+        long accumulatedCalories = 0;
 
         while (accumulatedCalories < targetCalories) {
             Collections.shuffle(items);
             Food food = items.get(0);
-            accumulatedCalories += food.getCalories();
-            selectedItems.merge(food, 1, Integer::sum);
+            int foodCount = (int) Math.ceil(Math.log(((targetCalories - accumulatedCalories) / food.getCalories()) + 2));
+            accumulatedCalories += food.getCalories() * foodCount;
+            selectedItems.merge(food, foodCount, Integer::sum);
         }
 
         return selectedItems;

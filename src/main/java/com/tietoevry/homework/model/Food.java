@@ -11,9 +11,9 @@ import lombok.Setter;
 @DiscriminatorValue("FOOD")
 public class Food extends Item {
 
-    private int calories;
+    private long calories;
 
-    public Food(String name, int calories) {
+    public Food(String name, long calories) {
         super(name);
         this.calories = calories;
     }

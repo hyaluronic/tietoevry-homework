@@ -11,12 +11,13 @@ import java.time.Month;
 @RequiredArgsConstructor
 public class CaloriesCalculator {
 
-    private static final Long CALORIES_PER_DAY = 10000L;  //TODO: move to configuration/db
-    //TODO: add algorithm to calculate daily calories by some properties?
+    public static final int CALORIES_PER_DAY = 10000;
+    //TODO: move to configuration/db
+    // or add algorithm to calculate daily calories by some properties?
 
     private final SeasonService seasonService;
 
-    public int calculate(LocalDate startDate, LocalDate endDate) {
+    public long calculate(LocalDate startDate, LocalDate endDate) {
         double caloriesNeeded = 0;
         LocalDate currentDate = startDate;
         Month currentMonth = startDate.getMonth();
@@ -30,6 +31,6 @@ public class CaloriesCalculator {
             caloriesNeeded += currentSeason.getCaloriesMultiplier() * CALORIES_PER_DAY;
             currentDate = currentDate.plusDays(1);
         }
-        return (int) Math.ceil(caloriesNeeded);
+        return (long) Math.ceil(caloriesNeeded);
     }
 }

@@ -16,6 +16,10 @@ public class SeasonService {
 
     @Cacheable("seasons")
     public Season findByMonth(Month month) {
-        return repository.findByMonthsContaining(month).stream().findAny().orElseThrow();
+        return repository
+                .findByMonthsContaining(month)
+                .stream()
+                .findAny()
+                .orElseThrow(); //TODO: add normal exception
     }
 }

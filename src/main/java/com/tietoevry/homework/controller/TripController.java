@@ -14,17 +14,17 @@ import java.time.LocalDate;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/trip")
 @RequiredArgsConstructor
 public class TripController {
 
     private final ItemRetriever itemRetriever;
 
-    @GetMapping("/trip")
+    @GetMapping("/items")
     public ResponseEntity<Map<String, Integer>> getTripItems(
             @RequestParam("kilometers") long kilometers,
-            @RequestParam("startDate")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate
-            ) {
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate
+    ) {
         try {
             return new ResponseEntity<>(
                     itemRetriever.getItems(kilometers, startDate),

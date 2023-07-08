@@ -22,13 +22,12 @@ public class ItemRetriever {
     private final MealsCalculator mealsCalculator;
     private final MiscService miscService;
 
-//    Item.name, count
     public Map<String, Integer> getItems(long kilometers, LocalDate startDate) {
         LocalDate endDate = tripTimeCalculator.calculateEndDate(kilometers, startDate);
 
         Map<String, Integer> tripItems = new HashMap<>();
 
-        int calories = caloriesCalculator.calculate(startDate, endDate);
+        long calories = caloriesCalculator.calculate(startDate, endDate);
         Map<Food, Integer> meals = mealsCalculator.calculateMeals(calories);
         meals.forEach((food, count) -> tripItems.put(food.getName(), count));
 

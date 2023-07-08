@@ -22,15 +22,15 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args){
-        Season spring = new Season("Winter", Set.of(Month.DECEMBER, Month.JANUARY, Month.FEBRUARY), 0.7, 1.2);
-        Season summer = new Season("Spring", Set.of(Month.MARCH, Month.APRIL, Month.MAY), 0.9, 1);
-        Season autumn = new Season("Summer", Set.of(Month.JUNE, Month.JULY, Month.AUGUST), 1, 1.2);
-        Season winter = new Season("Autumn", Set.of(Month.SEPTEMBER, Month.OCTOBER, Month.NOVEMBER), 0.9, 1);
+        Season winter = new Season("Winter", Set.of(Month.DECEMBER, Month.JANUARY, Month.FEBRUARY), 0.7, 1.2);
+        Season spring = new Season("Spring", Set.of(Month.MARCH, Month.APRIL, Month.MAY), 0.9, 1);
+        Season summer = new Season("Summer", Set.of(Month.JUNE, Month.JULY, Month.AUGUST), 1, 1.2);
+        Season autumn = new Season("Autumn", Set.of(Month.SEPTEMBER, Month.OCTOBER, Month.NOVEMBER), 0.9, 1);
 
+        seasonRepository.save(winter);
         seasonRepository.save(spring);
         seasonRepository.save(summer);
         seasonRepository.save(autumn);
-        seasonRepository.save(winter);
 
         itemRepository.save(new Food("coffee", 1));
         itemRepository.save(new Food("Burger", 350));

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +14,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class TripTimeCalculator {
 
-    private static final Long KILOMETERS_PER_DAY = 50L; //TODO: move to configuration/db
+    public static final int KILOMETERS_PER_DAY = 50; //TODO: move to configuration/db
 
     private final SeasonService seasonService;
 
@@ -33,7 +32,7 @@ public class TripTimeCalculator {
             kilometersWalked += currentSeason.getSpeedMultiplier() * KILOMETERS_PER_DAY;
             currentDate = currentDate.plusDays(1);
         }
-        return currentDate;
+        return currentDate.minusDays(1);
     }
 
     public Set<Season> getAllTripSeasons(LocalDate startDate, LocalDate endDate) {
@@ -51,7 +50,7 @@ public class TripTimeCalculator {
     public Set<DayTime> getTripDayTimes(LocalDate startDate, LocalDate endDate) {
         Set<DayTime> dayTimes = new HashSet<>();
         dayTimes.add(DayTime.DAY);
-        if (ChronoUnit.DAYS.between(startDate, endDate) > 1) {
+        if (endDate.isAfter(startDate)) {
             dayTimes.add(DayTime.NIGHT);
         }
         return dayTimes;
